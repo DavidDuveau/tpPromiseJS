@@ -50,14 +50,22 @@ hearthstoneApi.info().then((allInfo) => {
       hearthstoneApi.set(setName),
       hearthstoneApi.classes(className)
     ]).then(([setsCards, classesCards]) => {
-      let cardCards = setsCards
+      let resultCards = setsCards
         .filter(cardSet => classesCards
           .find(cardClass => cardSet.cardId === cardClass.cardId))
-      console.log(cardCards)
-      return cardCards;
+      console.log(resultCards)
+      return resultCards;
     });
   }
 
   getCards('Classic', 'Warrior');
 
 });
+
+export function test2(a, b, ...values) {
+  console.log("a", a);
+  console.log("b", b);
+  console.log("values", values);
+}
+
+test2(1, 2, 3, 4, 5, 6);

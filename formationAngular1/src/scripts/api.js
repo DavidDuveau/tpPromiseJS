@@ -13,8 +13,8 @@ export class HearthstoneApi {
     get endpoint() {
         return 'https://omgvamp-hearthstone-v1.p.rapidapi.com/';
     }
-    
-    
+
+
     get headers() {
         return {
             ...this.defaultHeader,
@@ -38,12 +38,12 @@ export class HearthstoneApi {
     classes(name, query) {
         return this._get(`cards/classes/${name}`, query).then(this._parseResult.bind(this));
     }
-    
-    
+
+
     _get(path, query = {}) {
         let url = `${this.endpoint}${path}`;
         const queryString = this._objectToQueryString(query);
-        if(queryString) {
+        if (queryString) {
             url += `?${queryString}`;
         }
         return fetch(url, {
@@ -53,11 +53,11 @@ export class HearthstoneApi {
     }
 
     _parseResult(response) {
-      if(response.ok) {
-        return response.json();
-      } else {
-        throw new Error(response);
-      }
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error(response);
+        }
     }
 
     _objectToQueryString(obj) {
