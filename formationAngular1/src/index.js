@@ -1,64 +1,41 @@
-
-import { HearthstoneApi } from './scripts/api.js';
-import { SetType } from './set-type.js';
-import { ClassType } from './class-type.js';
-
-const hearthstoneApi = new HearthstoneApi();
+import { getAllSetAndClasses } from './scripts/get-all.js';
+import { ClassType } from './class/classType.js';
+import { SetType } from './class/setType.js';
 
 
-hearthstoneApi.info().then((allInfo) => {
-    console.log(allInfo.sets);
-    console.log(allInfo.classes);
 
-    let typeTable = [];
-    allInfo.sets.forEach(element => {
-        let elementSetType = new SetType(element);
-        typeTable.push(elementSetType);
-    });
-    console.log(typeTable);
+//Set
+const allPromiseSets = allInfo.sets
+  .map(n => new SetType(n))
+  .map(setType => {
+    return hearthstoneApi.set(setType.name).then((cards => {
+      if (Array.isArray(cards)) {
+        setType.cards = cards;
+      }
+      return setType;
+    }));
+  }); Promise.all(allPromiseSets).then(results => console.log(results));
 
-    const allCardSet = allInfo.sets.map(n => new SetType(n));
-    allCardSet.forEach(e => {
-        hearthstoneApi.set(e.name).then(cardSet => e.cards = cardSet)
-    })
-    console.log(allCardSet);
 
-    let classTable = [];
-    allInfo.classes.forEach(element2 => {
-        let elementClassType = new ClassType(element2);
-        classTable.push(elementClassType);
-    });
-    console.log(classTable);
+// Class
+const allPromiseClasses = allInfo.classes
+  .map(n => new ClassType(n))
+  .map(classType => {
+    return hearthstoneApi.classes(classType.name).then((cards => {
+      if (Array.isArray(cards)) {
+        classType.cards = cards;
+      }
+      return classType;
+    }));
+  });
 
-    //correction avec une promiseAll
-    const allPromiseSet = allInfo.sets
-        .map(n => new SetType(n))
-        .map(setType => {
-            return hearthstoneApi.set(setType.name).then((cards => {
-                if (Array.isArray(cards)) {
-                    setType.cards = cards;
-                }
-                console.log('-------------', setType);
-                return setType;
-            }));
-        });
+Promise.all(allPromiseClasses).then(results => console.log(results));
 
-    const allPromiseClasses = allInfo.classes
-        .map(n => new ClassType(n))
-        .map(classType => {
-            return hearthstoneApi.classes(classType.name).then((cards => {
-                if (Array.isArray(cards)) {
-                    classType.cards = cards;
-                }
-                console.log('-------------', classType);
-                return classType;
-            }));
-        });
 
-    // Promise.all([
-    //     Promise.all(allPromiseClasses),
-    //     Promise.all(allPromiseSet)]).then(results => {
-    //         console.log('all with cards', results);
-    //     })
 
-})
+getAllSetAndClasses().then((results) => {
+  console.log('all with cards', results);
+}, (reason) => {
+  console.log('Error', reason);
+});
+
