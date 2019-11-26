@@ -1,6 +1,6 @@
-import { SetType } from '../class/set-type.js';
-import { ClassType } from '../class/class-type.js';
 import { HearthstoneApi } from './api.js';
+import { ClassType } from '../class/class-type.js';
+import { SetType } from '../class/set-type.js';
 
 const hearthstoneApi = new HearthstoneApi();
 function createAllPromiseFor(data, ConstructorType, apiCalled) {
@@ -29,5 +29,3 @@ export function getAllSetAndClasses() {
     return Promise.all(allPromise);
   }));
 }
-
-const 
