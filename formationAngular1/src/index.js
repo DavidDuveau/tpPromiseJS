@@ -7,7 +7,7 @@ import { HearthstoneApi } from './scripts/api.js';
 const hearthstoneApi = new HearthstoneApi();
 hearthstoneApi.info().then((allInfo) => {
 
-  //   //Set
+  //   /*getting all set*/
   //   const allPromiseSets = allInfo.sets
   //     .map(n => new SetType(n))
   //     .map(setType => {
@@ -20,7 +20,7 @@ hearthstoneApi.info().then((allInfo) => {
   //     }); Promise.all(allPromiseSets).then(results => console.log(results));
 
 
-  //   // Class
+  //   /*getting all classe*/
   //   const allPromiseClasses = allInfo.classes
   //     .map(n => new ClassType(n))
   //     .map(classType => {
@@ -42,6 +42,9 @@ hearthstoneApi.info().then((allInfo) => {
   //   console.log('Error', reason);
   // });
 
+  /*intersection between two arrays, 
+  no duplicates (filter + find)*/
+
   function getCards(setName, className) {
     return Promise.all([
       hearthstoneApi.set(setName),
@@ -49,12 +52,12 @@ hearthstoneApi.info().then((allInfo) => {
     ]).then(([setsCards, classesCards]) => {
       let cardCards = setsCards
         .filter(cardSet => classesCards
-          .find(cardClass => cardSet.cardId === cardClass.cardId) !== undefined)
+          .find(cardClass => cardSet.cardId === cardClass.cardId))
       console.log(cardCards)
       return cardCards;
     });
   }
 
-  getCards('Basic', 'Druid');
+  getCards('Classic', 'Warrior');
 
 });
